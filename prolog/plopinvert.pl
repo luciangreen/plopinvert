@@ -23,7 +23,7 @@ dep(const(_), []).
 % invert(+Formulas, +N, +Wanted, -Inputs): every input of length N (positions no formula reads left as
 % variables) that gives Wanted, in order of the input values.
 invert(Fs, N, W, Ins) :- length(Fs, L), length(W, L), findall(In, ( length(In, N), assign(Fs, W, In) ), Ins0), Ins = Ins0.
-assign(Fs, W, In) :- length(In, N), Top is N - 1, numlist(0, Top, Ps), used(Fs, Used), assign_(Ps, Used, Fs, W, In).
+assign(Fs, W, In) :- length(In, N), Top is N - 1, numlist(0, Top, Ps), used(Fs, Used), assign_(Ps, Used, Fs, W, In), check(Fs, W, In).   % the final check also covers characters that read no inputs
 % (a plain recursion, not a lambda: a lambda would copy In, whose places are still unbound, and lose the values set)
 assign_([], _, _, _, _).
 assign_([P|Ps], Used, Fs, W, In) :- ( memberchk(P, Used) -> nth0(P, In, X), between(0, 9, X), check(Fs, W, In) ; true ), assign_(Ps, Used, Fs, W, In).
